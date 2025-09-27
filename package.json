@@ -54,7 +54,7 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.5.2",
     "jest": "^27.4.5",
-    "rimraf": "^2.7.1",
+    "rimraf": "^6.0.1",
     "scratch-audio": "github:02engine/scratch-audio#main",
     "scratch-render": "github:02engine/scratch-render#main",
     "scratch-vm": "github:02engine/scratch-vm#main",

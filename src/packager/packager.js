@@ -971,6 +971,103 @@ cd "$(dirname "$0")"
     return zip;
   }
 
+  async addCordovaAndroid (projectZip) {
+    // Generate a basic Cordova project structure that can be used to build an APK
+    const zip = new (await getJSZip());
+    
+    // Create the Cordova project structure
+    const packageName = this.options.app.packageName || 'org.turbowarp.packaged';
+    const appName = this.options.app.windowTitle || 'Packaged Project';
+    
+    // Create a basic Cordova config.xml
+    const configXml = `<?xml version='1.0' encoding='utf-8'?>
+<widget id="${packageName}" version="${this.options.app.version}" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>${escapeXML(appName)}</name>
+    <description>
+        A packaged Scratch project
+    </description>
+    <author email="packager@example.com" href="https://turbowarp.org/">
+        TurboWarp Packager
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+    <engine name="android" />
+</widget>`;
+    
+    zip.file('config.xml', configXml);
+    
+    // Create package.json
+    const packageJson = {
+      name: packageName,
+      displayName: appName,
+      version: this.options.app.version,
+      description: 'A packaged Scratch project',
+      main: 'index.html',
+      author: 'TurboWarp Packager',
+      license: 'MIT',
+      dependencies: {
+        'cordova-android': '^10.1.1'
+      },
+      cordova: {
+        platforms: ['android']
+      }
+    };
+    
+    zip.file('package.json', JSON.stringify(packageJson, null, 2));
+    
+    // Create README with instructions
+    const readme = `# Cordova Android Project
+
+This is a Cordova project that can be used to build an Android APK.
+
+## Setup Instructions
+
+1. Extract this zip file to a folder
+2. Install Node.js and npm if you haven't already
+3. Install Cordova CLI globally:
+   npm install -g cordova
+4. Install project dependencies:
+   npm install
+5. Add the Android platform:
+   cordova platform add android
+6. Build the APK:
+   cordova build android
+
+## Requirements
+
+- Node.js and npm
+- Android Studio or Android SDK
+- JAVA_HOME environment variable set to JDK path
+- ANDROID_HOME environment variable set to Android SDK path
+
+## Additional Notes
+
+You may need to install additional dependencies depending on your system.
+For detailed setup instructions, refer to the Cordova documentation.`;
+    
+    zip.file('README.txt', readme);
+    
+    // Copy project files to www directory
+    for (const [path, data] of Object.entries(projectZip.files)) {
+      setFileFast(zip, `www/${path}`, data);
+    }
+    
+    return zip;
+  }
+
   makeWebSocketProvider () {
     // If using the default turbowarp.org server, we'll add a fallback for the turbowarp.xyz alias.
     // This helps work around web filters as turbowarp.org can be blocked for games and turbowarp.xyz uses

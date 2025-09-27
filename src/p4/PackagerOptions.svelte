@@ -831,6 +831,13 @@
       </div>
       <div class="group">
         <label class="option">
+          <input type="radio" name="environment" bind:group={$options.target} value="cordova-android">
+          Cordova Android APK
+        </label>
+        <p>Creates a Cordova project that can be used to build an Android APK. After downloading the zip file, you will need to manually install dependencies and run build commands. See README.txt in the generated zip for detailed instructions.</p>
+      </div>
+      <div class="group">
+        <label class="option">
           <input type="radio" name="environment" bind:group={$options.target} value="electron-win64">
           {$_('options.application-win64').replace('{type}', 'Electron')}
         </label>

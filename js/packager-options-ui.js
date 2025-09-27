@@ -9587,11 +9587,8 @@ cd "$(dirname "$0")"
 <widget id="${packageName}" version="${this.options.app.version}" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>${Object(_common_escape_xml__WEBPACK_IMPORTED_MODULE_2__["default"])(appName)}</name>
     <description>
-        A packaged Scratch project
+        02Engine Packager
     </description>
-    <author email="packager@example.com" href="https://turbowarp.org/">
-        TurboWarp Packager
-    </author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -9602,6 +9599,7 @@ cd "$(dirname "$0")"
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <preference name="android-gradleDistributionUrl" value="https\://services.gradle.org/distributions/gradle-7.6.5-bin.zip" />
     </platform>
     <engine name="android" />
 </widget>`;

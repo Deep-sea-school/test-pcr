@@ -9644,7 +9644,7 @@ cd "$(dirname "$0")"
       "IS_GRADLE_PLUGIN_KOTLIN_ENABLED": false
     };
 
-    zip.file('cdv-gradle-config.json', cdvgradleconfig);
+    zip.file('cdv-gradle-config.json', JSON.stringify(cdvgradleconfig, null));
 
     // Create README with instructions
     const readme = `# Cordova Android Project

@@ -996,7 +996,7 @@ cd "$(dirname "$0")"
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <preference name="android-gradleDistributionUrl" value="https\://services.gradle.org/distributions/gradle-7.6.5-bin.zip" />
+        <resource-file src="./cdv-gradle-config.json" target="cdv-gradle-config.json" />
     </platform>
     <engine name="android" />
 </widget>`;
@@ -1025,7 +1025,24 @@ cd "$(dirname "$0")"
     };
     
     zip.file('package.json', JSON.stringify(packageJson, null, 2));
-    
+
+    // Create cdv-gradle-config.json
+    const cdvgradleconfig = {
+      "MIN_SDK_VERSION": 22,
+      "SDK_VERSION": 30,
+      "GRADLE_VERSION": "7.6.5",
+      "MIN_BUILD_TOOLS_VERSION": "30.0.3",
+      "AGP_VERSION": "4.2.2",
+      "KOTLIN_VERSION": "1.5.21",
+      "ANDROIDX_APP_COMPAT_VERSION": "1.3.1",
+      "ANDROIDX_WEBKIT_VERSION": "1.4.0",
+      "GRADLE_PLUGIN_GOOGLE_SERVICES_VERSION": "4.3.8",
+      "IS_GRADLE_PLUGIN_GOOGLE_SERVICES_ENABLED": false,
+      "IS_GRADLE_PLUGIN_KOTLIN_ENABLED": false
+    };
+
+    zip.file('cdv-gradle-config.json', cdvgradleconfig);
+
     // Create README with instructions
     const readme = `# Cordova Android Project
 

@@ -4236,7 +4236,7 @@ function create_default_slot_6(ctx) {
 			t24 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])("\n          Cordova Android APK");
 			t25 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			p1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("p");
-			p1.textContent = "Creates a Cordova project that can be used to build an Android APK. After downloading the zip file, you will need to manually install dependencies and run build commands. See README.txt in the generated zip for detailed instructions.";
+			p1.textContent = "Creates a Cordova project that can be used to build an Android APK. After downloading the zip file, run \"npm install\" and then the Cordova build commands to generate the APK.";
 			t27 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			div4 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
 			label7 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("label");
@@ -9603,10 +9603,6 @@ cd "$(dirname "$0")"
     <platform name="android">
         <allow-intent href="market:*" />
     </platform>
-    <platform name="ios">
-        <allow-intent href="itms:*" />
-        <allow-intent href="itms-apps:*" />
-    </platform>
     <engine name="android" />
 </widget>`;
     
@@ -9626,6 +9622,10 @@ cd "$(dirname "$0")"
       },
       cordova: {
         platforms: ['android']
+      },
+      scripts: {
+        "build": "cordova build android",
+        "prepare": "cordova prepare android"
       }
     };
     
@@ -9640,14 +9640,10 @@ This is a Cordova project that can be used to build an Android APK.
 
 1. Extract this zip file to a folder
 2. Install Node.js and npm if you haven't already
-3. Install Cordova CLI globally:
-   npm install -g cordova
-4. Install project dependencies:
+3. Install project dependencies:
    npm install
-5. Add the Android platform:
-   cordova platform add android
-6. Build the APK:
-   cordova build android
+4. Build the APK:
+   npm run build
 
 ## Requirements
 
@@ -10403,6 +10399,8 @@ For detailed setup instructions, refer to the Cordova documentation.`;
         zip = await this.addElectron(zip);
       } else if (this.options.target === 'webview-mac') {
         zip = await this.addWebViewMac(zip);
+      } else if (this.options.target === 'cordova-android') {
+        zip = await this.addCordovaAndroid(zip);
       }
 
       this.ensureNotAborted();

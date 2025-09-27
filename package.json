@@ -58,7 +58,7 @@
     "scratch-audio": "github:02engine/scratch-audio#main",
     "scratch-render": "github:02engine/scratch-render#main",
     "scratch-vm": "github:02engine/scratch-vm#main",
-    "style-loader": "^2.0.0",
+    "style-loader": "^4.0.0",
     "svelte": "^3.44.3",
     "svelte-loader": "^3.1.2",
     "url-loader": "^4.1.1",

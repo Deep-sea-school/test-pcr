@@ -1,0 +1,71 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      html_url:
+        description: 'URL to the HTML file'
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install Cordova
+      run: |
+        npm install -g cordova
+
+    - name: Create Cordova project
+      run: |
+        cordova create android-app com.example.scratchapp ScratchApp
+        cd android-app
+        cordova platform add android
+
+    - name: Download HTML file
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        cd android-app
+        wget -O www/index.html ${{ github.event.inputs.html_url }}
+
+    - name: Build APK
+      run: |
+        cd android-app
+        cordova build android
+
+    - name: Upload APK as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: scratch-app-apk
+        path: android-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+
+    - name: Create Release
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release v${{ github.run_number }}
+        draft: false
+        prerelease: false
+
+    - name: Upload APK to Release
+      if: github.event_name == 'workflow_dispatch'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: android-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        asset_name: scratch-app.apk
+        asset_content_type: application/vnd.android.package-archive

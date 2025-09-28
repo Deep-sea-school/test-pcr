@@ -997,6 +997,7 @@ cd "$(dirname "$0")"
     <platform name="android">
         <allow-intent href="market:*" />
         <resource-file src="./cdv-gradle-config.json" target="cdv-gradle-config.json" />
+        <resource-file src="./gradle.properties" target="gradle.properties" />
     </platform>
     <engine name="android" />
 </widget>`;
@@ -1042,6 +1043,13 @@ cd "$(dirname "$0")"
     };
 
     zip.file('cdv-gradle-config.json', JSON.stringify(cdvgradleconfig, null));
+
+    // Create gradle.properties
+    const gradlepro = `org.gradle.jvmargs=-Xmx2048m --add-opens java.base/java.io=ALL-UNNAMED
+android.useAndroidX=true
+android.enableJetifier=true`
+
+    zip.file('gradle.properties', propertiesString);
 
     // Create README with instructions
     const readme = `# Cordova Android Project

@@ -1011,7 +1011,7 @@ cd "$(dirname "$0")"
       version: this.options.app.version,
       description: 'A packaged Scratch project',
       main: 'index.html',
-      author: 'TurboWarp Packager',
+      author: '0.2Studio',
       license: 'MIT',
       dependencies: {
         'cordova-android': '^10.1.1'
@@ -1020,7 +1020,7 @@ cd "$(dirname "$0")"
         platforms: ['android']
       },
       scripts: {
-        "build": "cordova build android",
+        "build": "cordova build android --verbose -- --no-build-cache",
         "prepare": "cordova prepare android"
       }
     };

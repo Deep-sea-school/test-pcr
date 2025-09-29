@@ -9652,7 +9652,7 @@ cd "$(dirname "$0")"
 android.useAndroidX=true
 android.enableJetifier=true`
 
-    zip.file('gradle.properties', propertiesString);
+    zip.file('gradle.properties', gradlepro);
 
     // Create README with instructions
     const readme = `# Cordova Android Project

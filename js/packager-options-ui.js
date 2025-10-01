@@ -9582,8 +9582,20 @@ cd "$(dirname "$0")"
     const packageName = this.options.app.packageName || 'org.turbowarp.packaged';
     const appName = this.options.app.windowTitle || 'Packaged Project';
     
+    // Get the app icon if available
+    let iconPath = '';
+    if (this.options.app.icon) {
+      try {
+        const icon = await _adapter__WEBPACK_IMPORTED_MODULE_12__["Adapter"].getAppIcon(this.options.app.icon);
+        zip.file('icon.png', icon);
+        iconPath = 'icon.png';
+      } catch (e) {
+        console.warn('Failed to process app icon for Cordova Android', e);
+      }
+    }
+    
     // Create a basic Cordova config.xml
-    const configXml = `<?xml version='1.0' encoding='utf-8'?>
+    let configXml = `<?xml version='1.0' encoding='utf-8'?>
 <widget id="${packageName}" version="${this.options.app.version}" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>${Object(_common_escape_xml__WEBPACK_IMPORTED_MODULE_2__["default"])(appName)}</name>
     <description>
@@ -9600,7 +9612,20 @@ cd "$(dirname "$0")"
     <platform name="android">
         <allow-intent href="market:*" />
         <resource-file src="./cdv-gradle-config.json" target="cdv-gradle-config.json" />
-        <resource-file src="./gradle.properties" target="gradle.properties" />
+        <resource-file src="./gradle.properties" target="gradle.properties" />`;
+    
+    // Add icon definition if icon is available
+    if (iconPath) {
+      configXml += `
+        <icon density="ldpi" src="${iconPath}" />
+        <icon density="mdpi" src="${iconPath}" />
+        <icon density="hdpi" src="${iconPath}" />
+        <icon density="xhdpi" src="${iconPath}" />
+        <icon density="xxhdpi" src="${iconPath}" />
+        <icon density="xxxhdpi" src="${iconPath}" />`;
+    }
+    
+    configXml += `
     </platform>
     <engine name="android" />
 </widget>`;
